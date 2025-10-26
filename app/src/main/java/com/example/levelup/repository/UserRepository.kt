@@ -5,9 +5,10 @@ import com.example.levelup.model.UserEntity
 
 class UserRepository(private val userDao: UserDao) {
 
+
     /** Inserta un nuevo usuario en la base de datos */
-    suspend fun insertUser(username: String, email: String, password: String): Long {
-        val user = UserEntity(username = username, email = email, password = password)
+    suspend fun insertUser(username: String, email: String, password: String, profileImageUri: String = "" ): Long {
+        val user = UserEntity(username = username, email = email, password = password, profileImageUri = profileImageUri)
         return userDao.insert(user)
     }
 

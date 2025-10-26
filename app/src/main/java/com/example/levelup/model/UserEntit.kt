@@ -21,7 +21,10 @@ data class UserEntity(
     val email: String,
 
     @ColumnInfo(name = "password")
-    val password: String
+    val password: String,
+
+    @ColumnInfo(name = "profile_image_uri")
+    val profileImageUri: String = ""
 )
 
 @Dao

@@ -61,6 +61,9 @@ class RegisterViewModel(
             )
         }
     }
+    fun onProfileImageSelected(uri: String) {
+        _state.update { it.copy(profileImageUri = uri) }
+    }
 
     fun onRegisterSubmit(
         onSuccess: () -> Unit,
@@ -73,6 +76,7 @@ class RegisterViewModel(
             currentState.email.isBlank() ||
             currentState.password.isBlank() ||
             currentState.confirmPassword.isBlank()
+
         ) {
             onError("Please fix all errors before submitting")
             return
@@ -88,7 +92,9 @@ class RegisterViewModel(
                 val userId = userRepository.insertUser(
                     username = currentState.username,
                     email = currentState.email,
-                    password = currentState.password
+                    password = currentState.password,
+                    profileImageUri = currentState.profileImageUri ?: ""
+
                 )
 
                 if (userId > 0) {

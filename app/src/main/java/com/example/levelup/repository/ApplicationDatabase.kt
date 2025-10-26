@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.levelup.model.UserDao
 import com.example.levelup.model.UserEntity
 
-@Database(entities = [UserEntity::class], version = 1)
+@Database(entities = [UserEntity::class], version = 3)
 abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 

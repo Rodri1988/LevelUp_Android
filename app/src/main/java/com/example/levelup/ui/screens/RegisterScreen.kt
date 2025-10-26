@@ -30,6 +30,12 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        ProfileImagePicker(
+            imageUri = state.profileImageUri,
+            onImageSelected = viewModel::onProfileImageSelected,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+
         OutlinedTextField(
             value = state.username,
             onValueChange = { viewModel.onChangeUsername(it) },

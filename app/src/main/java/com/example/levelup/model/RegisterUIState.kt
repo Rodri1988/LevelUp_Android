@@ -22,5 +22,6 @@ data class RegisterUIState(
     val email: String = "",
     val password: String = "",
     val confirmPassword: String = "",
+    val profileImageUri: String = "",
     val errors: RegisterUIErrors = RegisterUIErrors()
 )
