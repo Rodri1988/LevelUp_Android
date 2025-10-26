@@ -1,129 +1,107 @@
 package com.example.levelup.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.levelup.view_model.RegisterViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(
-    onNavigateToHome: () -> Unit = {},
-    onNavigateToLogin: () -> Unit = {},
-    onNavigateBack: () -> Unit = {},
+    onNavigateToHome: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    onNavigateBack: () -> Unit,
     viewModel: RegisterViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text("Registro", style = MaterialTheme.typography.titleLarge)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = state.username,
+            onValueChange = { viewModel.onChangeUsername(it) },
+            label = { Text("Nombre de Usuario") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = state.email,
+            onValueChange = { viewModel.onChangeEmail(it) },
+            label = { Text("Correo Electrónico") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = state.password,
+            onValueChange = { viewModel.onChangePassword(it) },
+            label = { Text("Contraseña") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = state.confirmPassword,
+            onValueChange = { viewModel.onChangeConfirmPassword(it) },
+            label = { Text("Confirmar Contraseña") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                viewModel.onRegisterSubmit(
+                    onSuccess = {
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Registro realizado con éxito")
+                        }
+                    },
+                    onError = { error ->
+                        scope.launch {
+                            snackbarHostState.showSnackbar(error)
+                        }
+                    }
+                )
+            },
+            modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(
-                onClick = onNavigateBack,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(16.dp)
-            ) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+            Text("Registrarse")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            TextButton(onClick = onNavigateBack) {
+                Text("Volver")
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Registro",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 32.dp)
-                )
-
-                OutlinedTextField(
-                    value = state.email,
-                    onValueChange = viewModel::onChangeEmail,
-                    supportingText = {
-                        if (state.errors.emailError != null) { Text(state.errors.emailError!!) } else { null }
-                    },
-                    label = { Text("Correo Electrónico") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                )
-
-                OutlinedTextField(
-                    value = state.password,
-                    onValueChange = viewModel::onChangePassword,
-                    supportingText = {
-                        if (state.errors.passwordError != null) { Text(state.errors.passwordError!!) } else { null }
-                    },
-                    label = { Text("Contraseña") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                )
-
-                OutlinedTextField(
-                    value = state.confirmPassword,
-                    onValueChange = viewModel::onChangeConfirmPassword,
-                    supportingText = {
-                        if (state.errors.confirmPasswordError != null) { Text(state.errors.confirmPasswordError!!) } else { null }
-                    },
-                    label = { Text("Confirmar Contraseña") },
-                    visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp)
-                )
-
-                Button(
-                    onClick = {
-                        viewModel.onRegisterSubmit(
-                            onSuccess = {
-                                onNavigateToHome()
-                            },
-                            onError = { errorMessage ->
-                                scope.launch {
-                                    snackbarHostState.showSnackbar(
-                                        message = errorMessage,
-                                        duration = SnackbarDuration.Short
-                                    )
-                                }
-                            }
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                ) {
-                    Text("Registrarse")
-                }
-
-                TextButton(
-                    onClick = onNavigateToLogin
-                ) {
-                    Text("¿Ya tienes cuenta? Inicia Sesión")
-                }
+            TextButton(onClick = onNavigateToLogin) {
+                Text("¿Ya tienes cuenta? Inicia sesión")
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        SnackbarHost(hostState = snackbarHostState)
     }
 }

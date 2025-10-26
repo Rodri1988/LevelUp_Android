@@ -1,6 +1,5 @@
 package com.example.levelup.navigation
 
-import android.widget.GridView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -10,9 +9,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.levelup.ui.screens.HomeScreen
-import com.example.levelup.ui.screens.LoginScreen
-import com.example.levelup.ui.screens.RegisterScreen
+import androidx.navigation.navArgument
+import androidx.navigation.NavType
+import com.example.levelup.ui.screens.*
 import com.example.levelup.view_model.ViewModelFactory
 
 @Composable
@@ -26,21 +25,25 @@ fun NavRouter(
             navController = navController,
             startDestination = ScreenRoute.Home.route
         ) {
+            // Home
             composable(ScreenRoute.Home.route) {
-                HomeScreen(
-                    onNavigateToLogin = {
-                        navController.navigate(ScreenRoute.Login.route)
-                    },
-                    onNavigateToRegister = {
-                        navController.navigate(ScreenRoute.Register.route)
-                    }
-                )
+                HomeScreen(navController = navController)
             }
 
+            // Index con username opcional
+            composable(
+                route = "${ScreenRoute.Index.route}/{username}",
+                arguments = listOf(navArgument("username") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val username = backStackEntry.arguments?.getString("username") ?: ""
+                IndexScreen(navController = navController, username = username)
+            }
+
+            // Login
             composable(ScreenRoute.Login.route) {
                 LoginScreen(
-                    onNavigateToHome = {
-                        navController.navigate(ScreenRoute.Home.route) {
+                    onNavigateToHome = { username ->
+                        navController.navigate("${ScreenRoute.Index.route}/$username") {
                             popUpTo(ScreenRoute.Home.route) { inclusive = true }
                         }
                     },
@@ -54,6 +57,7 @@ fun NavRouter(
                 )
             }
 
+            // Register
             composable(ScreenRoute.Register.route) {
                 RegisterScreen(
                     onNavigateToHome = {

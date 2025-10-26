@@ -9,16 +9,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LoginViewModel (
+class LoginViewModel(
     private val userRepository: UserRepository
 ) : ViewModel() {
-    private val _state = MutableStateFlow(LoginUIState())
 
+    private val _state = MutableStateFlow(LoginUIState())
     val state = _state
 
+    /** Actualiza el email del usuario */
     fun onChangeEmail(email: String) {
-
-
         _state.update {
             it.copy(
                 email = email,
@@ -27,32 +26,48 @@ class LoginViewModel (
         }
     }
 
+    /** Actualiza la contraseña del usuario */
     fun onChangePassword(password: String) {
         _state.update {
             it.copy(
                 password = password,
+                errors = it.errors.copy(
+                    passwordError = if (password.length < 6) "Password must be at least 6 characters" else null
+                )
             )
         }
     }
 
-    fun onLoginSubmit(onSuccess: () -> Unit, onError: (String) -> Unit) {
+    /**
+     * Función para iniciar sesión.
+     * @param onSuccess Devuelve el username si login es exitoso.
+     * @param onError Devuelve mensaje de error si falla el login.
+     */
+    fun onLoginSubmit(
+        onSuccess: (String) -> Unit,
+        onError: (String) -> Unit
+    ) {
         val currentState = state.value
 
-        if (currentState.errors.hasErrors() || currentState.email.isEmpty() || currentState.password.isEmpty()) {
-            onError("Please fix all errors before submitting")
+        // Validación de campos
+        if (currentState.email.isBlank() || currentState.password.isBlank() || currentState.errors.hasErrors()) {
+            onError("Por favor complete todos los campos correctamente")
             return
         }
 
+        // Ejecutar login en coroutine
         viewModelScope.launch {
             try {
-                val user = userRepository.getUserByEmail(currentState.email)
-                if (user != null && user.password == currentState.password) {
-                    onSuccess()
+                val valid = userRepository.validateLogin(currentState.email, currentState.password)
+                if (valid) {
+                    // Llamada suspendida dentro de coroutine
+                    val username = userRepository.getUsernameByEmail(currentState.email)
+                    onSuccess(username) // Devuelve username al IndexScreen
                 } else {
-                    onError("Invalid email or password")
+                    onError("Credenciales incorrectas")
                 }
             } catch (e: Exception) {
-                onError("Login failed: ${e.message}")
+                onError("Error al iniciar sesión: ${e.message}")
             }
         }
     }
