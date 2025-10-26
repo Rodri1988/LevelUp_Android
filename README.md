@@ -46,32 +46,46 @@ Aplicación móvil de e-commerce gaming desarrollada en Android con Jetpack Comp
 ## Estructura del Proyecto
 ```
 app/src/main/java/com/example/levelup/
-├── model/              # Entidades y estados UI
+├── model/                          # Entidades y estados UI
 │   ├── LoginUIState.kt
 │   ├── RegisterUIState.kt
+│   ├── UserDao_Impl               # DAO generado por Room
 │   └── UserEntity.kt
-├── view_model/         # ViewModels (lógica de negocio)
+│
+├── repository/                     # Repositorios y base de datos
+│   ├── ApplicationDatabase.kt
+│   ├── ApplicationDatabase_Impl   # Base de datos generada por Room
+│   └── UserRepository.kt
+│
+├── view_model/                     # ViewModels (lógica de negocio)
 │   ├── LoginViewModel.kt
 │   ├── RegisterViewModel.kt
 │   └── ViewModelFactory.kt
-├── repository/         # Repositorios y base de datos
-│   ├── ApplicationDatabase.kt
-│   └── UserRepository.kt
-├── ui/
-│   ├── screens/       # Pantallas Compose
+│
+├── ui/                            # Interfaz de usuario
+│   ├── screens/                   # Pantallas Compose
 │   │   ├── HomeScreen.kt
+│   │   ├── IndexScreen.kt        
 │   │   ├── LoginScreen.kt
+│   │   ├── ProfileImagePicker.kt 
 │   │   └── RegisterScreen.kt
-│   └── theme/         # Temas y estilos
+│   │
+│   └── theme/                     # Temas y estilos
 │       ├── Color.kt
 │       ├── Theme.kt
 │       └── Type.kt
-├── navigation/        # Sistema de navegación
+│
+├── navigation/                    # Sistema de navegación
 │   ├── NavRouter.kt
 │   └── ScreenRoute.kt
-├── utils/             # Utilidades y validaciones
-│   └── ValidateEmail.kt
-└── MainActivity.kt    # Activity principal
+│
+├── utils/                         # Utilidades y validaciones
+│   └── Strings.kt                
+│
+├── ExampleInstrumentedTest       # Tests
+├── ExampleUnitTest               # Tests
+├── MainActivity.kt               # Activity principal
+└── SplashActivity.kt             # Animacion
 ```
 
 ## Instalación y Ejecución

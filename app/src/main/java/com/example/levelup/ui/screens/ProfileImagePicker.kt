@@ -1,5 +1,6 @@
 package com.example.levelup.ui.screens
 
+
 import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -62,7 +63,7 @@ fun ProfileImagePicker(
         }
     }
 
-    // Launcher para permisos de galería
+    // Launcher para permisos de galería (Android 12 y anteriores)
     val galleryPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -142,8 +143,17 @@ fun ProfileImagePicker(
                 ) {
                     TextButton(
                         onClick = {
-                            galleryPermissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
                             showDialog = false
+                            try {
+                                // Android 13+ no requiere permiso, versiones anteriores sí
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                                    galleryLauncher.launch("image/*")
+                                } else {
+                                    galleryPermissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                                }
+                            } catch (e: Exception) {
+                                android.util.Log.e("ProfilePicker", "Error launching gallery", e)
+                            }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -175,8 +185,9 @@ fun ProfileImagePicker(
 // Función para crear URI temporal para la foto
 private fun createImageUri(context: Context): Uri {
     val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-    val imageFileName = "JPEG_${timeStamp}_"
-    val imageFile = File(context.cacheDir, "${imageFileName}.jpg")
+    val imageFileName = "profile_${timeStamp}.jpg"
+    val imageFile = File(context.cacheDir, imageFileName)
+    imageFile.createNewFile() // Crea el archivo antes de generar URI
 
     return FileProvider.getUriForFile(
         context,
