@@ -15,16 +15,15 @@ abstract class ApplicationDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: ApplicationDatabase? = null
 
-        fun getDatabase(
-            context: Context
-        ): ApplicationDatabase {
+        fun getDatabase(context: Context): ApplicationDatabase {
             return INSTANCE ?: synchronized(this) {
-
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ApplicationDatabase::class.java,
                     "items_table"
                 )
+                    // 🔥 Esta línea evita el error de migración
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance
