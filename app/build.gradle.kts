@@ -41,24 +41,28 @@ android {
 }
 
 dependencies {
-        implementation(libs.androidx.core.ktx)
-        implementation(libs.androidx.lifecycle.runtime.ktx)
-        implementation(libs.androidx.activity.compose)
-        implementation(platform(libs.androidx.compose.bom))
-        implementation(libs.androidx.ui)                        // Cambió
-        implementation(libs.androidx.ui.graphics)               // Cambió
-        implementation(libs.androidx.ui.tooling.preview)        // Cambió
-        implementation(libs.androidx.material3)                 // Cambió
-        implementation(libs.androidx.navigation.compose)
-        implementation(libs.androidx.room.ktx)
-        implementation(libs.androidx.room.runtime)
-        kapt(libs.androidx.room.compiler)
+    // Compose dependencies
+    implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.compose.material3:material3:1.3.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
+    implementation("androidx.navigation:navigation-compose:2.7.0")
 
-        testImplementation(libs.junit)
-        androidTestImplementation(libs.androidx.junit)
-        androidTestImplementation(libs.androidx.espresso.core)
-        androidTestImplementation(platform(libs.androidx.compose.bom))
-        androidTestImplementation(libs.androidx.ui.test.junit4)  // Cambió
-        debugImplementation(libs.androidx.ui.tooling)            // Cambió
-        debugImplementation(libs.androidx.ui.test.manifest)      // Cambió
-    }
+    // Dependencias adicionales
+    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.activity:activity-compose:1.7.0")
+
+    // Room dependencies
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+
+    // Testing dependencies
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+}
