@@ -1,14 +1,20 @@
 package com.example.levelup.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.levelup.view_model.LoginViewModel
+import com.example.levelup.R
 import kotlinx.coroutines.launch
 
 @Composable
@@ -22,78 +28,106 @@ fun LoginScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        // 🖼 Imagen de fondo
+        Image(
+            painter = painterResource(id = R.drawable.imagen3), // Reemplaza con tu imagen
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
 
-        // 🔹 Botón Volver
-        IconButton(
-            onClick = { onNavigateBack() },
-            modifier = Modifier.padding(bottom = 16.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Volver"
-            )
-        }
-
-        // Título
-        Text("Iniciar Sesión", style = MaterialTheme.typography.titleLarge)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Campo Email
-        OutlinedTextField(
-            value = state.email,
-            onValueChange = { viewModel.onChangeEmail(it) },
-            label = { Text("Correo Electrónico") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Campo Contraseña
-        OutlinedTextField(
-            value = state.password,
-            onValueChange = { viewModel.onChangePassword(it) },
-            label = { Text("Contraseña") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Botón Iniciar Sesión
-        Button(
-            onClick = {
-                viewModel.onLoginSubmit(
-                    onSuccess = { username ->
-                        onNavigateToHome(username)
-                    },
-                    onError = { error ->
-                        scope.launch {
-                            snackbarHostState.showSnackbar(error)
-                        }
-                    }
+            // 🔹 Botón Volver
+            IconButton(
+                onClick = { onNavigateBack() },
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(bottom = 16.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Volver",
+                    tint = Color.White
                 )
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Iniciar Sesión")
+            }
+
+            // Título
+            Text(
+                "Iniciar Sesión",
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 🎨 Colores personalizados de los campos
+            val fieldColors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White.copy(alpha = 0.6f),
+                unfocusedContainerColor = Color.White.copy(alpha = 0.6f),
+                focusedIndicatorColor = Color.White,
+                unfocusedIndicatorColor = Color.White.copy(alpha = 0.7f),
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                cursorColor = Color.Black
+            )
+
+            // Campo Email
+            OutlinedTextField(
+                value = state.email,
+                onValueChange = { viewModel.onChangeEmail(it) },
+                label = { Text("Correo Electrónico") },
+                modifier = Modifier.fillMaxWidth(),
+                colors = fieldColors
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Campo Contraseña
+            OutlinedTextField(
+                value = state.password,
+                onValueChange = { viewModel.onChangePassword(it) },
+                label = { Text("Contraseña") },
+                modifier = Modifier.fillMaxWidth(),
+                colors = fieldColors
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón Iniciar Sesión
+            Button(
+                onClick = {
+                    viewModel.onLoginSubmit(
+                        onSuccess = { username -> onNavigateToHome(username) },
+                        onError = { error ->
+                            scope.launch { snackbarHostState.showSnackbar(error) }
+                        }
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White.copy(alpha = 0.8f),
+                    contentColor = Color.Black
+                )
+            ) {
+                Text("Iniciar Sesión")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Botón Registro
+            TextButton(onClick = onNavigateToRegister) {
+                Text("¿No tienes cuenta? Regístrate", color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            SnackbarHost(hostState = snackbarHostState)
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Botón Registro
-        TextButton(onClick = onNavigateToRegister) {
-            Text("¿No tienes cuenta? Regístrate")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Snackbar
-        SnackbarHost(hostState = snackbarHostState)
     }
 }

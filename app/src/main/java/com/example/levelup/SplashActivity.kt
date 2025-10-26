@@ -50,28 +50,28 @@ fun SplashScreen(onTimeout: () -> Unit) {
 
     // Animación de escala (crece)
     val scaleAnim by animateFloatAsState(
-        targetValue = if (startAnimation) 1f else 0.2f,
+        targetValue = if (startAnimation) 1f else 0.1f,
         animationSpec = tween(durationMillis = 1500),
         label = "scale"
     )
 
     LaunchedEffect(key1 = true) {
         startAnimation = true
-        delay(5000) // 5 segundos de duración
+        delay(1500) // 5 segundos de duración
         onTimeout()
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White), // Cambia el color de fondo si lo necesitas
+            .background(Color.Gray), // Cambia el color de fondo si lo necesitas
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.imagen1),
+            painter = painterResource(id = R.drawable.imagen2),
             contentDescription = "Logo Level Up",
             modifier = Modifier
-                .size(250.dp)
+                .fillMaxSize()
                 .scale(scaleAnim)
                 .alpha(alphaAnim)
         )
