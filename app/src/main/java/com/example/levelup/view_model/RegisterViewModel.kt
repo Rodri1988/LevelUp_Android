@@ -9,6 +9,7 @@ import com.example.levelup.utils.validateEmail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.example.levelup.utils.PasswordUtils
 
 class RegisterViewModel(
     private val userRepository: UserRepository
@@ -78,21 +79,21 @@ class RegisterViewModel(
             currentState.confirmPassword.isBlank()
 
         ) {
-            onError("Please fix all errors before submitting")
+            onError("Por favor, corrija todos los errores antes de enviar.")
             return
         }
 
         viewModelScope.launch {
             try {
                 if (userRepository.isEmailExists(currentState.email)) {
-                    onError("Email already exists")
+                    onError("El correo electrónico ya existe")
                     return@launch
                 }
 
                 val userId = userRepository.insertUser(
                     username = currentState.username,
                     email = currentState.email,
-                    password = currentState.password,
+                    password = PasswordUtils.hashPassword(currentState.password),
                     profileImageUri = currentState.profileImageUri ?: ""
 
                 )
@@ -100,10 +101,10 @@ class RegisterViewModel(
                 if (userId > 0) {
                     onSuccess()
                 } else {
-                    onError("Registration failed")
+                    onError("Registro fallido")
                 }
             } catch (e: Exception) {
-                onError("Registration failed: ${e.message}")
+                onError("Registro fallido: ${e.message}")
             }
         }
     }

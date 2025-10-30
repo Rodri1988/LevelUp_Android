@@ -16,6 +16,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.levelup.view_model.LoginViewModel
 import com.example.levelup.R
 import kotlinx.coroutines.launch
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.text.input.VisualTransformation
+
+
 
 @Composable
 fun LoginScreen(
@@ -27,6 +33,7 @@ fun LoginScreen(
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    var passwordVisible by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         // 🖼 Imagen de fondo
@@ -95,7 +102,17 @@ fun LoginScreen(
                 onValueChange = { viewModel.onChangePassword(it) },
                 label = { Text("Contraseña") },
                 modifier = Modifier.fillMaxWidth(),
-                colors = fieldColors
+                colors = fieldColors,
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña",
+                            tint = Color.Black
+                        )
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))

@@ -8,6 +8,7 @@ import com.example.levelup.utils.validateEmail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.example.levelup.utils.PasswordUtils
 
 class LoginViewModel(
     private val userRepository: UserRepository
@@ -32,7 +33,7 @@ class LoginViewModel(
             it.copy(
                 password = password,
                 errors = it.errors.copy(
-                    passwordError = if (password.length < 6) "Password must be at least 6 characters" else null
+                    passwordError = if (password.length < 6) "La contraseña debe tener al menos 6 caracteres" else null
                 )
             )
         }
@@ -58,7 +59,10 @@ class LoginViewModel(
         // Ejecutar login en coroutine
         viewModelScope.launch {
             try {
-                val valid = userRepository.validateLogin(currentState.email, currentState.password)
+                val valid = userRepository.validateLogin(
+                    currentState.email,
+                    PasswordUtils.hashPassword(currentState.password)
+                )
                 if (valid) {
                     // Llamada suspendida dentro de coroutine
                     val username = userRepository.getUsernameByEmail(currentState.email)
