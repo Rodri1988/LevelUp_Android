@@ -44,4 +44,7 @@ interface UserDao {
 
     @Delete
     suspend fun delete(user: UserEntity)
+
+    @Query("UPDATE users SET profile_image_uri = :newImageUri WHERE uid = :userId")
+    suspend fun updateProfileImage(userId: Int, newImageUri: String)
 }

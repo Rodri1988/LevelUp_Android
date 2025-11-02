@@ -1,5 +1,6 @@
 package com.example.levelup.navigation
 
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -72,6 +73,21 @@ fun NavRouter(
                         navController.navigate(ScreenRoute.Home.route)
                     },
                     viewModel = viewModel(factory = viewModelFactory)
+                )
+            }
+
+            // Profile - 🆕 NUEVO
+            composable(ScreenRoute.Profile.route) {
+                ProfileScreen(
+                    viewModel = viewModel(factory = viewModelFactory),
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onLogout = {
+                        navController.navigate(ScreenRoute.Home.route) {
+                            popUpTo(ScreenRoute.Home.route) { inclusive = true }
+                        }
+                    }
                 )
             }
         }

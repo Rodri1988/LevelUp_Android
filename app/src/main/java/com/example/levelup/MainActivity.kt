@@ -1,5 +1,6 @@
 package com.example.levelup
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +13,7 @@ import com.example.levelup.navigation.NavRouter
 import com.example.levelup.repository.ApplicationDatabase
 import com.example.levelup.repository.UserRepository
 import com.example.levelup.ui.theme.TestWithDBTheme
+import com.example.levelup.utils.SessionManager  // 🆕 Import
 import com.example.levelup.view_model.ViewModelFactory
 
 class MainActivity : ComponentActivity() {
@@ -21,10 +23,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Initialize database and repository
+        // Initialize database, repository and session manager
         val database = ApplicationDatabase.getDatabase(applicationContext)
         val userRepository = UserRepository(database.userDao())
-        viewModelFactory = ViewModelFactory(userRepository)
+        val sessionManager = SessionManager(this)  // 🆕 Agregado
+        viewModelFactory = ViewModelFactory(userRepository, sessionManager)  // 🆕 Agregado sessionManager
 
         setContent {
             TestWithDBTheme {

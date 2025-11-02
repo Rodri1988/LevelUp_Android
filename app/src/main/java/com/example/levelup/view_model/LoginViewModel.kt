@@ -1,9 +1,11 @@
 package com.example.levelup.view_model
 
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.levelup.model.LoginUIState
 import com.example.levelup.repository.UserRepository
+import com.example.levelup.utils.SessionManager
 import com.example.levelup.utils.validateEmail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -11,7 +13,8 @@ import kotlinx.coroutines.launch
 import com.example.levelup.utils.PasswordUtils
 
 class LoginViewModel(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginUIState())
@@ -63,10 +66,24 @@ class LoginViewModel(
                     currentState.email,
                     PasswordUtils.hashPassword(currentState.password)
                 )
+
                 if (valid) {
-                    // Llamada suspendida dentro de coroutine
-                    val username = userRepository.getUsernameByEmail(currentState.email)
-                    onSuccess(username) // Devuelve username al IndexScreen
+                    // Obtener el usuario completo
+                    val user = userRepository.getUserByEmail(currentState.email)
+
+                    if (user != null) {
+                        // 🔥 GUARDAR SESIÓN
+                        sessionManager.saveUserSession(
+                            userId = user.uid,
+                            username = user.username,
+                            email = user.email
+                        )
+
+                        // Devolver username al IndexScreen
+                        onSuccess(user.username)
+                    } else {
+                        onError("Error al obtener datos del usuario")
+                    }
                 } else {
                     onError("Credenciales incorrectas")
                 }

@@ -7,4 +7,5 @@ sealed class ScreenRoute(val route: String) {
     }
     object Login : ScreenRoute("login")
     object Register : ScreenRoute("register")
+    object Profile : ScreenRoute("profile")
 }

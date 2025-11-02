@@ -36,4 +36,18 @@ class UserRepository(private val userDao: UserDao) {
     suspend fun deleteUser(user: UserEntity) {
         userDao.delete(user)
     }
+
+    /** Obtiene un usuario completo por email */
+    suspend fun getUserByEmail(email: String): UserEntity? {
+        return userDao.findByEmail(email)
+    }
+
+    /** Obtiene un usuario por su ID */
+    suspend fun getUserById(userId: Int): UserEntity? {
+        return userDao.getAll().find { it.uid == userId }
+    }
+    /** Actualiza la foto de perfil del usuario */
+    suspend fun updateProfileImage(userId: Int, newImageUri: String) {
+        userDao.updateProfileImage(userId, newImageUri)
+    }
 }
