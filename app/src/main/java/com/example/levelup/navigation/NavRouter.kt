@@ -1,6 +1,5 @@
 package com.example.levelup.navigation
 
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -76,7 +75,8 @@ fun NavRouter(
                 )
             }
 
-            // Profile - 🆕 NUEVO
+            // Profile
+            /*
             composable(ScreenRoute.Profile.route) {
                 ProfileScreen(
                     viewModel = viewModel(factory = viewModelFactory),
@@ -88,6 +88,30 @@ fun NavRouter(
                             popUpTo(ScreenRoute.Home.route) { inclusive = true }
                         }
                     }
+                )
+            }*/
+
+            // Products - CATÁLOGO
+            composable(ScreenRoute.Products.route) {
+                ProductsScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                    onProductClick = { productId ->
+                        navController.navigate(ScreenRoute.ProductDetail.createRoute(productId))
+                    },
+                    viewModel = viewModel(factory = viewModelFactory)
+                )
+            }
+
+            // ProductDetail - DETALLE DEL PRODUCTO
+            composable(
+                route = ScreenRoute.ProductDetail.route,
+                arguments = listOf(navArgument("productId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val productId = backStackEntry.arguments?.getInt("productId") ?: 0
+                ProductDetailScreen(
+                    productId = productId,
+                    onNavigateBack = { navController.popBackStack() },
+                    viewModel = viewModel(factory = viewModelFactory)
                 )
             }
         }

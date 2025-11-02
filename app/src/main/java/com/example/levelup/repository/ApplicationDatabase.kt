@@ -6,10 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.levelup.model.UserDao
 import com.example.levelup.model.UserEntity
+import com.example.levelup.model.ProductEntity
 
-@Database(entities = [UserEntity::class], version = 3)
+@Database(
+    entities = [UserEntity::class, ProductEntity::class],
+    version = 4,
+    exportSchema = false
+)
 abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun productDao(): ProductDao
 
     companion object {
         @Volatile
@@ -22,7 +28,6 @@ abstract class ApplicationDatabase : RoomDatabase() {
                     ApplicationDatabase::class.java,
                     "items_table"
                 )
-                    // 🔥 Esta línea evita el error de migración
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

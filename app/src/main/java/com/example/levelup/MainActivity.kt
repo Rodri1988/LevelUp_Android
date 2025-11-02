@@ -1,6 +1,5 @@
 package com.example.levelup
 
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,8 +11,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.levelup.navigation.NavRouter
 import com.example.levelup.repository.ApplicationDatabase
 import com.example.levelup.repository.UserRepository
+import com.example.levelup.repository.ProductRepository
 import com.example.levelup.ui.theme.TestWithDBTheme
-import com.example.levelup.utils.SessionManager  // 🆕 Import
+import com.example.levelup.utils.SessionManager
 import com.example.levelup.view_model.ViewModelFactory
 
 class MainActivity : ComponentActivity() {
@@ -23,11 +23,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Initialize database, repository and session manager
         val database = ApplicationDatabase.getDatabase(applicationContext)
         val userRepository = UserRepository(database.userDao())
-        val sessionManager = SessionManager(this)  // 🆕 Agregado
-        viewModelFactory = ViewModelFactory(userRepository, sessionManager)  // 🆕 Agregado sessionManager
+        val productRepository = ProductRepository(database.productDao()) // TU PARTE
+        val sessionManager = SessionManager(this)
+
+        viewModelFactory = ViewModelFactory(
+            userRepository,
+            productRepository,  // TU PARTE
+            sessionManager
+        )
 
         setContent {
             TestWithDBTheme {
