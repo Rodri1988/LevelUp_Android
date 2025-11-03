@@ -25,6 +25,14 @@ class ViewModelFactory(
         if (modelClass.isAssignableFrom(ProductsViewModel::class.java)) {
             return ProductsViewModel(productRepository) as T
         }
+        // UserViewModel - ← AGREGAR ESTE BLOQUE
+        if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
+            return UserViewModel(userRepository, sessionManager) as T
+        }
+        // ProductsViewModel
+        if (modelClass.isAssignableFrom(ProductsViewModel::class.java)) {
+            return ProductsViewModel(productRepository) as T
+        }
 
         throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")
     }

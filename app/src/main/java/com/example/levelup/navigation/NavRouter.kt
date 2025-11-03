@@ -76,7 +76,6 @@ fun NavRouter(
             }
 
             // Profile
-            /*
             composable(ScreenRoute.Profile.route) {
                 ProfileScreen(
                     viewModel = viewModel(factory = viewModelFactory),
@@ -89,7 +88,7 @@ fun NavRouter(
                         }
                     }
                 )
-            }*/
+            }
 
             // Products - CATÁLOGO
             composable(ScreenRoute.Products.route) {

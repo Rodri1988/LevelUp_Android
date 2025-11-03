@@ -47,6 +47,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
     implementation("androidx.navigation:navigation-compose:2.7.0")
     implementation("androidx.compose.animation:animation:1.7.6")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     // Dependencias adicionales
     implementation("androidx.core:core-ktx:1.10.1")
@@ -69,10 +70,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    // Para cargar imágenes desde URL
-    implementation("io.coil-kt:coil-compose:2.5.0")
-
 
 
 }
