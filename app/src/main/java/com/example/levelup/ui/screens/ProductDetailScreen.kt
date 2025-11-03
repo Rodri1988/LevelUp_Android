@@ -113,8 +113,9 @@ fun ProductDetailScreen(
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
+                                // Precio formateado con 3 decimales
                                 Text(
-                                    text = "$${product.price}",
+                                    text = "$${String.format("%.3f", product.price)}",
                                     style = MaterialTheme.typography.headlineLarge,
                                     color = Color(0xFF39FF14)
                                 )

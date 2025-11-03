@@ -53,7 +53,7 @@ fun ProductCard(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "$${String.format("%,.0f", product.price)} CLP",
+                    text = "$${String.format("%.3f", product.price)} CLP",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
