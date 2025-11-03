@@ -41,7 +41,7 @@ fun ProductsScreen(
             containerColor = Color.Transparent,
             topBar = {
                 TopAppBar(
-                    title = { Text("Catálogo Gaming") },
+                    title = { Text("Catálogo") },
                     navigationIcon = {
                         IconButton(onClick = onNavigateBack) {
                             Icon(Icons.Default.ArrowBack, "Volver")
