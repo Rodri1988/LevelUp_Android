@@ -1,14 +1,16 @@
 package com.example.levelup.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.example.levelup.model.ProductEntity
 
 @Composable
@@ -17,6 +19,13 @@ fun ProductCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val imageResId = context.resources.getIdentifier(
+        product.imageUrl,
+        "drawable",
+        context.packageName
+    )
+
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
@@ -24,8 +33,8 @@ fun ProductCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column {
-            AsyncImage(
-                model = product.imageUrl,
+            Image(
+                painter = painterResource(id = if (imageResId != 0) imageResId else android.R.drawable.ic_menu_gallery),
                 contentDescription = product.name,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -44,7 +53,7 @@ fun ProductCard(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "$${product.price}",
+                    text = "$${String.format("%,.0f", product.price)} CLP",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )

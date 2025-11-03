@@ -22,7 +22,7 @@ class ProductRepository(private val productDao: ProductDao) {
                 ProductEntity(
                     name = "Gaming Headset Pro",
                     description = "Audífonos gaming con micrófono profesional, sonido envolvente 7.1 y cancelación de ruido activa",
-                    price = 89.99,
+                    price = 89.990,
                     imageUrl = "product_headset",
                     category = "Audio",
                     stock = 15,
@@ -31,7 +31,7 @@ class ProductRepository(private val productDao: ProductDao) {
                 ProductEntity(
                     name = "Mechanical Keyboard RGB",
                     description = "Teclado mecánico con switches Cherry MX Red, iluminación RGB personalizable y teclas programables",
-                    price = 129.99,
+                    price = 129.990,
                     imageUrl = "product_keyboard",
                     category = "Periféricos",
                     stock = 8,
@@ -40,7 +40,7 @@ class ProductRepository(private val productDao: ProductDao) {
                 ProductEntity(
                     name = "Gaming Mouse Elite",
                     description = "Mouse gaming de alta precisión con sensor óptico de 16000 DPI y 8 botones programables",
-                    price = 59.99,
+                    price = 59.990,
                     imageUrl = "product_mouse",
                     category = "Periféricos",
                     stock = 20,
@@ -49,7 +49,7 @@ class ProductRepository(private val productDao: ProductDao) {
                 ProductEntity(
                     name = "Monitor Gaming 27\"",
                     description = "Monitor curvo gaming de 27 pulgadas, 144Hz, 1ms de respuesta, ideal para gaming competitivo",
-                    price = 299.99,
+                    price = 299.990,
                     imageUrl = "product_monitor",
                     category = "Monitores",
                     stock = 5,

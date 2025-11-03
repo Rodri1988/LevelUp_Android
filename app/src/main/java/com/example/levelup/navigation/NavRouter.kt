@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import com.example.levelup.ui.screens.*
 import com.example.levelup.view_model.ViewModelFactory
+import com.example.levelup.view_model.ProductsViewModel
 
 @Composable
 fun NavRouter(
@@ -92,12 +93,13 @@ fun NavRouter(
 
             // Products - CATÁLOGO
             composable(ScreenRoute.Products.route) {
+                val productsViewModel: ProductsViewModel = viewModel(factory = viewModelFactory)
                 ProductsScreen(
                     onNavigateBack = { navController.popBackStack() },
                     onProductClick = { productId ->
                         navController.navigate(ScreenRoute.ProductDetail.createRoute(productId))
                     },
-                    viewModel = viewModel(factory = viewModelFactory)
+                    viewModel = productsViewModel
                 )
             }
 
@@ -107,10 +109,11 @@ fun NavRouter(
                 arguments = listOf(navArgument("productId") { type = NavType.IntType })
             ) { backStackEntry ->
                 val productId = backStackEntry.arguments?.getInt("productId") ?: 0
+                val productsViewModel: ProductsViewModel = viewModel(factory = viewModelFactory)
                 ProductDetailScreen(
                     productId = productId,
                     onNavigateBack = { navController.popBackStack() },
-                    viewModel = viewModel(factory = viewModelFactory)
+                    viewModel = productsViewModel
                 )
             }
         }

@@ -102,7 +102,7 @@ fun IndexScreen(navController: NavController, username: String) {
             ) {
                 NavTextButton("Home") { navController.navigate(ScreenRoute.Home.route) }
                 NavTextButton("Perfil") { navController.navigate(ScreenRoute.Profile.route)}
-                NavTextButton("Catálogo") { navController.navigate(ScreenRoute.Home.route) }
+                NavTextButton("Catálogo") { navController.navigate(ScreenRoute.Products.route) }
                 //NavTextButton("Carrito") { navController.navigate(ScreenRoute.Home.route) }
                 NavTextButton("Cerrar sesión") { navController.navigate(ScreenRoute.Home.route) }
             }
