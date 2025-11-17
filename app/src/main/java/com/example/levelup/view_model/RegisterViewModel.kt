@@ -23,7 +23,7 @@ class RegisterViewModel(
             it.copy(
                 username = username,
                 errors = it.errors.copy(
-                    usernameError = if (username.isBlank()) "Username cannot be empty" else null
+                    usernameError = if (username.isBlank()) "El nombre de usuario no puede estar vacío." else null
                 )
             )
         }
@@ -45,8 +45,8 @@ class RegisterViewModel(
             it.copy(
                 password = password,
                 errors = it.errors.copy(
-                    passwordError = if (password.length < 6) "Password must be at least 6 characters" else null,
-                    confirmPasswordError = if (it.confirmPassword != password) "Passwords don't match" else null
+                    passwordError = if (password.length < 6) "La contraseña debe tener al menos 6 caracteres" else null,
+                    confirmPasswordError = if (it.confirmPassword != password) "Las contraseñas no coinciden" else null
                 )
             )
         }
@@ -57,7 +57,7 @@ class RegisterViewModel(
             it.copy(
                 confirmPassword = confirmPassword,
                 errors = it.errors.copy(
-                    confirmPasswordError = if (confirmPassword != it.password) "Passwords don't match" else null
+                    confirmPasswordError = if (confirmPassword != it.password) "Las contraseñas no coinciden" else null
                 )
             )
         }

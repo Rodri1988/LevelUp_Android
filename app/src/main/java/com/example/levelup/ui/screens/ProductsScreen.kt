@@ -55,49 +55,65 @@ fun ProductsScreen(
                 )
             }
         ) { padding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-            ) {
-                when {
-                    uiState.isLoading -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center)
-                        )
+            when {
+                uiState.isLoading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = Color(0xFF39FF14))
                     }
+                }
 
-                    uiState.error != null -> {
+                uiState.error != null -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Text(
                             text = "Error: ${uiState.error}",
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(16.dp),
+                            modifier = Modifier.padding(16.dp),
                             color = Color.White
                         )
                     }
+                }
 
-                    uiState.products.isEmpty() -> {
+                uiState.products.isEmpty() -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Text(
                             text = "No hay productos disponibles",
-                            modifier = Modifier.align(Alignment.Center),
                             color = Color.White
                         )
                     }
+                }
 
-                    else -> {
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(2),
-                            contentPadding = PaddingValues(16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            items(uiState.products) { product ->
-                                ProductCard(
-                                    product = product,
-                                    onClick = { onProductClick(product.id) }
-                                )
-                            }
+                else -> {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(
+                            start = 16.dp,
+                            end = 16.dp,
+                            top = padding.calculateTopPadding() + 16.dp,
+                            bottom = 16.dp
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(uiState.products) { product ->
+                            ProductCard(
+                                product = product,
+                                onClick = { onProductClick(product.id) }
+                            )
                         }
                     }
                 }

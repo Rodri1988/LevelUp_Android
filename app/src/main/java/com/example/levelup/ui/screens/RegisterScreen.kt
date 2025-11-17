@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.material.icons.Icons
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun RegisterScreen(
@@ -74,69 +76,121 @@ fun RegisterScreen(
                 unfocusedIndicatorColor = Color.White.copy(alpha = 0.7f),
                 focusedTextColor = Color.Black,
                 unfocusedTextColor = Color.Black,
-                cursorColor = Color.Black
+                cursorColor = Color.Black,
+                errorContainerColor = Color(0xFFFFCDD2).copy(alpha = 0.6f),
+                errorIndicatorColor = Color.Red,
+                errorCursorColor = Color.Red
             )
 
-            OutlinedTextField(
-                value = state.username,
-                onValueChange = { viewModel.onChangeUsername(it) },
-                label = { Text("Nombre de Usuario") },
-                modifier = Modifier.fillMaxWidth(),
-                colors = fieldColors
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = state.email,
-                onValueChange = { viewModel.onChangeEmail(it) },
-                label = { Text("Correo Electrónico") },
-                modifier = Modifier.fillMaxWidth(),
-                colors = fieldColors
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = state.password,
-                onValueChange = { viewModel.onChangePassword(it) },
-                label = { Text("Contraseña") },
-                modifier = Modifier.fillMaxWidth(),
-                colors = fieldColors,
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(
-                            imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña",
-                            tint = Color.Black
-                        )
-                    }
+            // ✅ Campo Username con error
+            Column {
+                OutlinedTextField(
+                    value = state.username,
+                    onValueChange = { viewModel.onChangeUsername(it) },
+                    label = { Text("Nombre de Usuario") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = fieldColors,
+                    isError = state.errors.usernameError != null
+                )
+                if (state.errors.usernameError != null) {
+                    Text(
+                        text = state.errors.usernameError!!,
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                    )
                 }
-            )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                value = state.confirmPassword,
-                onValueChange = { viewModel.onChangeConfirmPassword(it) },
-                label = { Text("Confirmar Contraseña") },
-                modifier = Modifier.fillMaxWidth(),
-                colors = fieldColors,
-                visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                trailingIcon = {
-                    IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
-                        Icon(
-                            imageVector = if (confirmPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = if (confirmPasswordVisible) "Ocultar contraseña" else "Mostrar contraseña",
-                            tint = Color.Black
-                        )
-                    }
+            // ✅ Campo Email con error
+            Column {
+                OutlinedTextField(
+                    value = state.email,
+                    onValueChange = { viewModel.onChangeEmail(it) },
+                    label = { Text("Correo Electrónico") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = fieldColors,
+                    isError = state.errors.emailError != null
+                )
+                if (state.errors.emailError != null) {
+                    Text(
+                        text = state.errors.emailError!!,
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                    )
                 }
-            )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // ✅ Campo Contraseña con error
+            Column {
+                OutlinedTextField(
+                    value = state.password,
+                    onValueChange = { viewModel.onChangePassword(it) },
+                    label = { Text("Contraseña") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = fieldColors,
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    isError = state.errors.passwordError != null,
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(
+                                imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña",
+                                tint = Color.Black
+                            )
+                        }
+                    }
+                )
+                if (state.errors.passwordError != null) {
+                    Text(
+                        text = state.errors.passwordError!!,
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // ✅ Campo Confirmar Contraseña con error
+            Column {
+                OutlinedTextField(
+                    value = state.confirmPassword,
+                    onValueChange = { viewModel.onChangeConfirmPassword(it) },
+                    label = { Text("Confirmar Contraseña") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = fieldColors,
+                    visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    isError = state.errors.confirmPasswordError != null,
+                    trailingIcon = {
+                        IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
+                            Icon(
+                                imageVector = if (confirmPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                contentDescription = if (confirmPasswordVisible) "Ocultar contraseña" else "Mostrar contraseña",
+                                tint = Color.Black
+                            )
+                        }
+                    }
+                )
+                if (state.errors.confirmPasswordError != null) {
+                    Text(
+                        text = state.errors.confirmPasswordError!!,
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // ✅ Botón deshabilitado cuando hay errores
             Button(
                 onClick = {
                     viewModel.onRegisterSubmit(
@@ -153,9 +207,16 @@ fun RegisterScreen(
                     )
                 },
                 modifier = Modifier.fillMaxWidth(),
+                enabled = !state.errors.hasErrors() &&
+                        state.username.isNotBlank() &&
+                        state.email.isNotBlank() &&
+                        state.password.isNotBlank() &&
+                        state.confirmPassword.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White.copy(alpha = 0.8f),
-                    contentColor = Color.Black
+                    contentColor = Color.Black,
+                    disabledContainerColor = Color.Gray.copy(alpha = 0.5f),
+                    disabledContentColor = Color.White
                 )
             ) {
                 Text("Registrarse")
