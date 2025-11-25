@@ -2,6 +2,8 @@ package com.example.levelup.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,7 +42,7 @@ fun IndexScreen(navController: NavController, username: String) {
         // Contenedor principal
         Column(modifier = Modifier.fillMaxSize()) {
 
-            // 🔍 Barra de búsqueda
+            // Barra de búsqueda
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -77,7 +79,7 @@ fun IndexScreen(navController: NavController, username: String) {
                 )
             }
 
-            // 🧭 Barra de navegación
+            // Barra de navegación
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -94,42 +96,131 @@ fun IndexScreen(navController: NavController, username: String) {
                 NavTextButton("Cerrar sesión") { navController.navigate(ScreenRoute.Home.route) }
             }
 
-            // 📜 Contenido desplazable
+            // CONTENIDO DESPLAZABLE
             Column(
                 modifier = Modifier
-                    .weight(1f) // hace que el contenido ocupe el espacio libre entre las barras
+                    .weight(1f)
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp, vertical = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+                // 1. Banner personal con diseño gamer
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(12.dp))
+                        .border(2.dp, Color(0xFF39FF14), RoundedCornerShape(12.dp))
+                        .padding(16.dp)
+                ) {
+                    Column(horizontalAlignment = Alignment.Start) {
+                        Text(
+                            text = "Bienvenido, $username",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF39FF14)
+                        )
+                        Text(
+                            text = "Explora nuevas ofertas hoy",
+                            fontSize = 16.sp,
+                            color = Color.White
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                // 2. Carrusel de ofertas
                 Text(
-                    text = "Bienvenido, $username",
-                    fontSize = 22.sp,
+                    text = "OFERTAS DE LA SEMANA",
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
-                    modifier = Modifier.padding(vertical = 16.dp)
+                    modifier = Modifier.align(Alignment.Start)
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
-
-                for (i in 1..6) {
-                    Text(
-                        text = "Contenido de ejemplo $i",
-                        color = Color.White,
-                        fontSize = 16.sp,
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
+                        .padding(top = 12.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.oferta1),
+                        contentDescription = "Oferta 1",
                         modifier = Modifier
-                            .padding(vertical = 8.dp)
-                            .background(
-                                Color.Black.copy(alpha = 0.5f),
-                                RoundedCornerShape(10.dp)
-                            )
-                            .fillMaxWidth()
-                            .padding(12.dp)
+                            .width(220.dp)
+                            .height(140.dp)
+                            .padding(end = 12.dp)
+                            .shadow(6.dp, RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.oferta2),
+                        contentDescription = "Oferta 2",
+                        modifier = Modifier
+                            .width(220.dp)
+                            .height(140.dp)
+                            .shadow(6.dp, RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.oferta3),
+                        contentDescription = "Oferta 2",
+                        modifier = Modifier
+                            .width(220.dp)
+                            .height(140.dp)
+                            .shadow(6.dp, RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop
                     )
                 }
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                // 3. Cupones o recompensas
+                Text(
+                    text = "Recompensas",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+
+                RewardCard("Gana 300 XP por tu primera compra")
+                RewardCard("10% OFF en productos RGB")
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                // 4. Opiniones de clientes
+                Text(
+                    text = "Opiniones de clientes",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+
+                ReviewCard("Excelente calidad en los periféricos, 10/10.", "Carlos")
+                ReviewCard("Envío rápido y productos originales.", "María")
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                // 5. Eventos
+                Text(
+                    text = "Eventos",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+
+                EventCard("Torneo online de Valorant – Inscríbete")
+                EventCard("Ofertas especiales durante Black Friday")
+                EventCard("Renovación de catálogo esta semana")
             }
 
-            // 🔽 Barra inferior fija con los botones de sesión 🔽
+            // Barra inferior fija
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -181,7 +272,51 @@ fun IndexScreen(navController: NavController, username: String) {
     }
 }
 
-// 🌟 Botón de navegación reutilizable
+// COMPONENTES EXTRA
+
+@Composable
+fun RewardCard(text: String) {
+    Text(
+        text = text,
+        fontSize = 16.sp,
+        color = Color.White,
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(10.dp))
+            .fillMaxWidth()
+            .padding(12.dp)
+    )
+}
+
+@Composable
+fun ReviewCard(review: String, author: String) {
+    Column(
+        modifier = Modifier
+            .padding(vertical = 6.dp)
+            .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(10.dp))
+            .fillMaxWidth()
+            .padding(12.dp)
+    ) {
+        Text(text = review, color = Color.White, fontSize = 15.sp)
+        Text(text = "- $author", color = Color(0xFF39FF14), fontSize = 13.sp)
+    }
+}
+
+@Composable
+fun EventCard(text: String) {
+    Text(
+        text = text,
+        color = Color.White,
+        fontSize = 16.sp,
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(10.dp))
+            .fillMaxWidth()
+            .padding(12.dp)
+    )
+}
+
+// NAV BUTTON
 @Composable
 fun NavTextButton(text: String, onClick: () -> Unit) {
     TextButton(onClick = onClick) {
