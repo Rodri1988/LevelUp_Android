@@ -122,5 +122,4 @@ class ProductRepository(private val productDao: ProductDao) {
             productDao.insertAllProducts(sampleProducts)
         }
     }
-
 }
