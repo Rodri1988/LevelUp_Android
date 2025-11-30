@@ -21,13 +21,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.levelup.R
 import com.example.levelup.navigation.ScreenRoute
+import com.example.levelup.view_model.FactViewModel
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+
 
 @Composable
 fun IndexScreen(navController: NavController, username: String) {
     var searchQuery by remember { mutableStateOf("") }
+    val factViewModel: FactViewModel = viewModel()
+    val fact by factViewModel.fact.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -129,6 +138,45 @@ fun IndexScreen(navController: NavController, username: String) {
                 }
 
                 Spacer(modifier = Modifier.height(25.dp))
+
+                // ===== BLOQUE DEL DATO NERD =====
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(2.dp, Color(0xFF39FF14), RoundedCornerShape(12.dp)),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Black.copy(alpha = 0.85f)  // ← Fondo negro
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(
+                            text = "Dato nerd del día:",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF39FF14)  // ← Verde neón
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = fact,
+                            fontSize = 16.sp,
+                            color = Color.White  // ← Texto blanco
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Button(
+                            onClick = { factViewModel.fetchFact() },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF39FF14)  // ← Botón verde neón
+                            )
+                        ) {
+                            Text("Otro dato", color = Color.Black)
+                        }
+                    }
+                }
+
 
                 // 2. Carrusel de ofertas
                 Text(
