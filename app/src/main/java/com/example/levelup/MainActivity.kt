@@ -17,7 +17,7 @@ import com.example.levelup.repository.ProductRepository
 import com.example.levelup.ui.theme.TestWithDBTheme
 import com.example.levelup.utils.SessionManager
 import com.example.levelup.view_model.ViewModelFactory
-import com.example.levelup.ui.screens.PostScreen
+
 
 
 class MainActivity : ComponentActivity() {
