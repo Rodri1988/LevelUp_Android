@@ -24,7 +24,6 @@ import com.example.levelup.navigation.ScreenRoute
 
 @Composable
 fun HomeScreen(navController: NavController) {
-
     Box(modifier = Modifier.fillMaxSize()) {
         // Fondo con imagen
         Image(
@@ -60,10 +59,10 @@ fun HomeNavButton(text: String, onClick: () -> Unit) {
     TextButton(
         onClick = onClick,
         modifier = Modifier
-            .fillMaxWidth() // Esto hace que el botón ocupe todo el ancho
+            .fillMaxWidth()
             .shadow(6.dp, shape = RoundedCornerShape(50))
             .background(Color.Black.copy(alpha = 0.7f), shape = RoundedCornerShape(50))
-            .padding(vertical = 12.dp) // Solo padding vertical, el horizontal no es necesario
+            .padding(vertical = 12.dp)
     ) {
         Text(
             text = text,

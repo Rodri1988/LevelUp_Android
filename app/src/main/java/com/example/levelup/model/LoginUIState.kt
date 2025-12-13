@@ -1,18 +1,14 @@
 package com.example.levelup.model
 
 data class LoginUIState(
-    val username: String = "",
     val email: String = "",
     val password: String = "",
-    val errors: LoginUIErrors = LoginUIErrors()
+    val errors: LoginErrors = LoginErrors()
 )
 
-data class LoginUIErrors(
-    val usernameError: String? = null,
+data class LoginErrors(
     val emailError: String? = null,
     val passwordError: String? = null
 ) {
-    fun hasErrors(): Boolean {
-        return usernameError != null || emailError != null || passwordError != null
-    }
+    fun hasErrors(): Boolean = emailError != null || passwordError != null
 }

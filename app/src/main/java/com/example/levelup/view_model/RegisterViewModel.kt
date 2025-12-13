@@ -3,13 +3,15 @@ package com.example.levelup.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.levelup.model.RegisterUIState
-import com.example.levelup.model.RegisterUIErrors
+import com.example.levelup.model.UserEntity
 import com.example.levelup.repository.UserRepository
+import com.example.levelup.utils.PasswordUtils
 import com.example.levelup.utils.validateEmail
+import com.example.levelup.utils.validatePassword
+import com.example.levelup.utils.validateUsername
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.example.levelup.utils.PasswordUtils
 
 class RegisterViewModel(
     private val userRepository: UserRepository
@@ -22,9 +24,7 @@ class RegisterViewModel(
         _state.update {
             it.copy(
                 username = username,
-                errors = it.errors.copy(
-                    usernameError = if (username.isBlank()) "El nombre de usuario no puede estar vacío." else null
-                )
+                errors = it.errors.copy(usernameError = validateUsername(username))
             )
         }
     }
@@ -33,9 +33,7 @@ class RegisterViewModel(
         _state.update {
             it.copy(
                 email = email,
-                errors = it.errors.copy(
-                    emailError = validateEmail(email)
-                )
+                errors = it.errors.copy(emailError = validateEmail(email))
             )
         }
     }
@@ -44,10 +42,7 @@ class RegisterViewModel(
         _state.update {
             it.copy(
                 password = password,
-                errors = it.errors.copy(
-                    passwordError = if (password.length < 6) "La contraseña debe tener al menos 6 caracteres" else null,
-                    confirmPasswordError = if (it.confirmPassword != password) "Las contraseñas no coinciden" else null
-                )
+                errors = it.errors.copy(passwordError = validatePassword(password))
             )
         }
     }
@@ -57,12 +52,15 @@ class RegisterViewModel(
             it.copy(
                 confirmPassword = confirmPassword,
                 errors = it.errors.copy(
-                    confirmPasswordError = if (confirmPassword != it.password) "Las contraseñas no coinciden" else null
+                    confirmPasswordError = if (confirmPassword != it.password) {
+                        "Las contraseñas no coinciden"
+                    } else null
                 )
             )
         }
     }
-    fun onProfileImageSelected(uri: String) {
+
+    fun onChangeProfileImageUri(uri: String) {
         _state.update { it.copy(profileImageUri = uri) }
     }
 
@@ -72,39 +70,44 @@ class RegisterViewModel(
     ) {
         val currentState = state.value
 
-        if (currentState.errors.hasErrors() ||
-            currentState.username.isBlank() ||
-            currentState.email.isBlank() ||
-            currentState.password.isBlank() ||
-            currentState.confirmPassword.isBlank()
+        // Validar que no haya errores
+        if (currentState.errors.hasErrors()) {
+            onError("Por favor corrija los errores en el formulario")
+            return
+        }
 
-        ) {
-            onError("Por favor, corrija todos los errores antes de enviar.")
+        // Validar que las contraseñas coincidan
+        if (currentState.password != currentState.confirmPassword) {
+            onError("Las contraseñas no coinciden")
             return
         }
 
         viewModelScope.launch {
             try {
-                if (userRepository.isEmailExists(currentState.email)) {
-                    onError("El correo electrónico ya existe")
+                // Verificar si el email ya existe
+                val existingUser = userRepository.getUserByEmail(currentState.email)
+
+                if (existingUser != null) {
+                    onError("Este email ya está registrado")
                     return@launch
                 }
 
-                val userId = userRepository.insertUser(
+                // Hashear la contraseña antes de guardar
+                val hashedPassword = PasswordUtils.hashPassword(currentState.password)
+
+                // Crear nuevo usuario
+                val newUser = UserEntity(
                     username = currentState.username,
                     email = currentState.email,
-                    password = PasswordUtils.hashPassword(currentState.password),
-                    profileImageUri = currentState.profileImageUri ?: ""
-
+                    password = hashedPassword, // ✅ Guardar contraseña hasheada
+                    profileImageUri = currentState.profileImageUri
                 )
 
-                if (userId > 0) {
-                    onSuccess()
-                } else {
-                    onError("Registro fallido")
-                }
+                userRepository.insertUser(newUser)
+                onSuccess()
+
             } catch (e: Exception) {
-                onError("Registro fallido: ${e.message}")
+                onError("Error al registrar: ${e.message}")
             }
         }
     }

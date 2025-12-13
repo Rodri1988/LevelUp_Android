@@ -4,17 +4,18 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.levelup.model.UserDao
+import com.example.levelup.model.CartItem
 import com.example.levelup.model.UserEntity
 import com.example.levelup.model.ProductEntity
 
 @Database(
-    entities = [UserEntity::class, ProductEntity::class],
-    version = 5,
+    entities = [UserEntity::class, CartItem::class, ProductEntity::class],
+    version = 3,
     exportSchema = false
 )
 abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun cartDao(): CartDao
     abstract fun productDao(): ProductDao
 
     companion object {
@@ -26,9 +27,9 @@ abstract class ApplicationDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ApplicationDatabase::class.java,
-                    "items_table"
+                    "levelup_database"
                 )
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(dropAllTables = true) // ✅ Versión actualizada
                     .build()
                 INSTANCE = instance
                 instance

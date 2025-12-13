@@ -64,7 +64,7 @@ fun RegisterScreen(
 
             ProfileImagePicker(
                 imageUri = state.profileImageUri,
-                onImageSelected = viewModel::onProfileImageSelected,
+                onImageSelected = viewModel::onChangeProfileImageUri,
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
