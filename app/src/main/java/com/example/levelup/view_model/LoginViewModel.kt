@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.example.levelup.utils.PasswordUtils
 
+private const val DEMO_MODE= false
 class LoginViewModel(
     private val userRepository: UserRepository,
     private val sessionManager: SessionManager
@@ -51,6 +52,15 @@ class LoginViewModel(
         onSuccess: (String) -> Unit,
         onError: (String) -> Unit
     ) {
+        if (DEMO_MODE){
+            sessionManager.saveUserSession(
+                userId =0,
+                username = "invitado",
+                email = "invitado@demo.cl"
+            )
+            onSuccess("invitado")
+            return
+        }
         val currentState = state.value
 
         // Validación de campos

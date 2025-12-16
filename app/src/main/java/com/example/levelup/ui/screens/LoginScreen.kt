@@ -67,7 +67,7 @@ fun LoginScreen(
 
             // Título
             Text(
-                "Iniciar Sesión",
+                text="Iniciar Sesión",
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.White
             )

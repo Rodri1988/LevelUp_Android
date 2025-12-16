@@ -1,52 +1,93 @@
 package com.example.levelup
 
 import com.example.levelup.utils.validateEmail
-import org.junit.Test
 import org.junit.Assert.*
+import org.junit.Test
 
 class EmailValidationTest {
 
     @Test
-    fun `email válido retorna null`() {
-        // Given
-        val validEmails = listOf(
-            "test@example.com",
-            "user.name@example.co.uk",
-            "user+tag@example.com"
-        )
+    fun `email valido retorna null`() {
+        // Arrange & Act & Assert
+        val email1 = "test@example.com"
+        assertNull("El email '$email1' deberia ser valido", validateEmail(email1))
 
-        // When & Then
-        validEmails.forEach { email ->
-            assertNull("Email $email debería ser válido", validateEmail(email))
-        }
+        val email2 = "user.name@domain.co"
+        assertNull("El email '$email2' deberia ser valido", validateEmail(email2))
+
+        val email3 = "user+tag@example.com"
+        assertNull("El email '$email3' deberia ser valido", validateEmail(email3))
+
+        val email4 = "nombre123@correo.com"
+        assertNull("El email '$email4' deberia ser valido", validateEmail(email4))
     }
 
     @Test
-    fun `email inválido retorna mensaje de error`() {
-        // Given
-        val invalidEmails = listOf(
-            "invalid",
+    fun `email invalido retorna mensaje de error`() {
+        // Arrange
+        val emailsInvalidos = listOf(
+            "invalid.email",
             "@example.com",
-            "test@",
-            "test@.com",
-            ""
+            "user@",
+            "user name@example.com"
         )
 
-        // When & Then
-        invalidEmails.forEach { email ->
-            assertNotNull("Email $email debería ser inválido", validateEmail(email))
+        // Act & Assert
+        emailsInvalidos.forEach { email ->
+            val resultado = validateEmail(email)
+            assertNotNull("El email '$email' deberia ser invalido", resultado)
+            assertTrue(
+                "El error deberia ser sobre formato",
+                resultado?.contains("formato") == true
+            )
         }
     }
 
     @Test
-    fun `email vacío retorna mensaje de error`() {
-        // Given
-        val emptyEmail = ""
+    fun `email vacio retorna mensaje especifico`() {
+        // Arrange
+        val email = ""
 
-        // When
-        val result = validateEmail(emptyEmail)
+        // Act
+        val resultado = validateEmail(email)
 
-        // Then
-        assertNotNull(result)
+        // Assert
+        assertEquals("El email es requerido", resultado)
+    }
+
+    @Test
+    fun `email con espacios es invalido`() {
+        // Arrange
+        val email = "test @example.com"
+
+        // Act
+        val resultado = validateEmail(email)
+
+        // Assert
+        assertNotNull("Email con espacios deberia ser invalido", resultado)
+    }
+
+    @Test
+    fun `email sin arroba es invalido`() {
+        // Arrange
+        val email = "testexample.com"
+
+        // Act
+        val resultado = validateEmail(email)
+
+        // Assert
+        assertNotNull("Email sin @ deberia ser invalido", resultado)
+    }
+
+    @Test
+    fun `email sin dominio es invalido`() {
+        // Arrange
+        val email = "test@"
+
+        // Act
+        val resultado = validateEmail(email)
+
+        // Assert
+        assertNotNull("Email sin dominio deberia ser invalido", resultado)
     }
 }

@@ -22,10 +22,10 @@ android {
     // ✅ CONFIGURACIÓN DE FIRMA
     signingConfigs {
         create("release") {
-            storeFile = file("C:/Users/ASUS/levelup-keystore/levelup-keystore.jks") // ⚠️ CAMBIAR POR TU RUTA
-            storePassword = "levelup2024" // ⚠️ CAMBIAR POR TU PASSWORD
+            storeFile = file("C:/Users/ASUS/levelup-keystore/levelup-keystore.jks")
+            storePassword = "levelup2024"
             keyAlias = "levelup-key"
-            keyPassword = "levelup2024" // ⚠️ CAMBIAR POR TU PASSWORD
+            keyPassword = "levelup2024"
         }
     }
 
@@ -36,7 +36,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release") // ✅ USAR FIRMA
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -44,11 +44,21 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
+    }
+
+    // ✅ AÑADIR ESTA SECCIÓN PARA LOS TESTS
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+        }
     }
 }
 
@@ -84,21 +94,46 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     kapt(libs.androidx.room.compiler)
 
-    // Testing dependencies
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    // ============================================
+    // ✅ TESTING DEPENDENCIES (MEJORADAS)
+    // ============================================
+
+    // JUnit 4
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // Kotlin Coroutines Test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+
+    // AndroidX Test - Core testing
     testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    // Mockito para mocking
     testImplementation("org.mockito:mockito-core:5.3.1")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0") // ✅ AÑADIDO
+
+    // Turbine para testing de Flow
     testImplementation("app.cash.turbine:turbine:1.0.0")
 
+    // ✅ AÑADIDAS: Para que los tests funcionen mejor
+    testImplementation("androidx.test:core:1.5.0")
+    testImplementation("androidx.test:core-ktx:1.5.0")
+    testImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("androidx.test.ext:junit-ktx:1.1.5")
+
+    // Android Instrumented Tests
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+
+    // Compose Testing
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    // Debug dependencies
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
